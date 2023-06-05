@@ -16,6 +16,15 @@ foreach ($pages as $key => $value) {
     $standard_key_array[$key] = $value['created_at'];
 }
 array_multisort($standard_key_array, SORT_DESC, $pages);
+foreach ($pages as $key => $page) {
+    $datetime = $page['created_at'];
+    $jp_datetime = date('Y年m月d日 H時i分s秒', strtotime($datetime));
+    $pages[$key]['created_at'] = $jp_datetime;
+}
+
+// $datetime = "2023-06-05 10:30:00"; // DBから取得した日時
+// $jp_datetime = date("Y年m月d日 H時i分s秒", strtotime($datetime));
+// echo $jp_datetime;
 ?>
 
 <body>
