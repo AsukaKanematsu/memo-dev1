@@ -12,6 +12,22 @@ $statement = $pdo->prepare($sql);
 $statement->execute();
 $pages = $statement->fetchAll(PDO::FETCH_ASSOC);
 
+$pages = [];
+
+if (isset($_GET['keyword'])) {
+    $keyword = $_GET['keyword'];
+    $sql = 'SELECT * FROM pages WHERE title LIKE :keyword';
+    $statement = $pdo->prepare($sql);
+    $statement->bindValue(':keyword', '%' . $keyword . '%', PDO::PARAM_STR);
+    $statement->execute();
+    $pages = $statement->fetchAll(PDO::PARAM_STR);
+} else {
+    $sql = 'SELECT * FROM pages';
+    $statement = $pdo->prepare($sql);
+    $statement->execute();
+    $pages = $statement->fetchAll(PDO::PARAM_STR);
+}
+
 foreach ($pages as $key => $value) {
     $standard_key_array[$key] = $value['created_at'];
 }
@@ -31,6 +47,14 @@ foreach ($pages as $key => $page) {
 
   <div>
     <a href="./create.php">メモを追加</a><br>
+  </div>
+
+  <div>
+<form method="GET" action="index.php">
+    <input type="text" name="keyword" placeholder="キーワードを入力">
+    <input type="submit" value="検索">
+</form>
+
   </div>
 
   <div>
